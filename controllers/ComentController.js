@@ -1,27 +1,27 @@
-const Post = require("../models/posts")
+const Coment = require("../models/coments")
 
-exports.crearPost = async (req, res) => {
+exports.crearComentario = async (req, res) => {
     console.log(req.body);
 
     try {
-        let post;
-        post = new Post(req.body);
-        await post.save();
-        res.send(post);
+        let coment;
+        coment = new Coment(req.body);
+        await coment.save();
+        res.send(coment);
     } catch (error) {
         console.log(error)
         res.status(500).send('Ups... hubo un error');
     }
 }
-exports.obtenerPostEspecifico = async (req, res) => {   
+exports.obtenerComentEspecifico = async (req, res) => {   
 
     try {
-        let post_especifico = await Post.findById(req.params.id);
+        let coment_especifico = await Post.findById(req.params.id);
 
-        if (!post_especifico) {
+        if (!coment_especifico) {
             res.status(404).json({ msg: "El post solicitado no existe" })
         } else {
-            res.json(post_especifico)
+            res.json(coment_especifico)
         }
     } catch (error) {
         console.log(error)
@@ -31,32 +31,31 @@ exports.obtenerPostEspecifico = async (req, res) => {
 
 exports.actualizarPost = async (req, res) => {
 
-    const { titleArticle, post, img } = req.body
+    const { name , coment } = req.body
 
-    let post2 = await Post.findById(req.params.id)
+    let coment2 = await Coment.findById(req.params.id)
 
-    if (!post2) {
+    if (!coment2) {
         res.status(404).json({ msg: 'No existe el post especificado' })
     }
 
-    post2.titleArticle = titleArticle
-    post2.post = post
-    post2.img = img
+    coment2.name = name
+    coment2.coment = coment
 
-    post2 = await Post.findOneAndUpdate({_id: req.params.id}, post2, {new : true})
-    res.json(post2)
+    coment2 = await Post.findOneAndUpdate({_id: req.params.id}, coment2, {new : true})
+    res.json(coment2)
 }
 
-exports.borrarPost = async (req, res) => {
+exports.borrarComent = async (req, res) => {
 
     try {
-        let post = await Post.findById(req.params.id)
+        let coment = await Coment.findById(req.params.id)
 
-        if (!post) {
+        if (!coment) {
             res.status(404).json({ msg: 'No existe el post especificado' })
         }
 
-        await Post.findOneAndRemove({ _id: req.params.id })
+        await Coment.findOneAndRemove({ _id: req.params.id })
         res.json({ msg: 'El post se elimino correctamente' })
     } catch (error) {
         console.log(error)
@@ -66,8 +65,8 @@ exports.borrarPost = async (req, res) => {
 
 exports.obtenerPost = async (req, res) => {
     try {
-        const publication = await Post.find()
-        res.json(publication)
+        const coment = await Coment.find()
+        res.json(coment)
     } catch (error) {
         console.log(error)
         res.status(500).send('Ups... hubo un error');
